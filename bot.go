@@ -279,7 +279,7 @@ func (bot *BotAPI) GetMe() (*User, error) {
 // IsMessageToMe returns true if message directed to this bot.
 //
 // It requires the Message.
-func (bot *BotAPI) IsMessageToMe(message Message) bool {
+func (bot *BotAPI) IsMessageToMe(message *Message) bool {
 	return strings.Contains(message.Text, "@"+bot.Self.UserName)
 }
 
