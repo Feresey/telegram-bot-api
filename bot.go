@@ -462,7 +462,6 @@ func (bot *BotAPI) GetUpdatesChan(config UpdateConfig) (UpdatesChannel, error) {
 	ch := make(chan Update, bot.Buffer)
 
 	go func() {
-		defer close(ch)
 		for {
 			select {
 			case <-bot.shutdownChannel:
