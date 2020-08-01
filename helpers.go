@@ -516,11 +516,11 @@ func NewInlineQueryResultMPEG4GIF(id, url string) InlineQueryResultMPEG4GIF {
 }
 
 // NewInlineQueryResultCachedMPEG4GIF create a new inline query with cached MPEG4 GIF.
-func NewInlineQueryResultCachedMPEG4GIF(id, MPEG4GifID string) InlineQueryResultCachedMpeg4Gif {
+func NewInlineQueryResultCachedMPEG4GIF(id, gifID string) InlineQueryResultCachedMpeg4Gif {
 	return InlineQueryResultCachedMpeg4Gif{
 		Type:   "mpeg4_gif",
 		ID:     id,
-		MGifID: MPEG4GifID,
+		MGifID: gifID,
 	}
 }
 
@@ -676,7 +676,11 @@ func NewEditMessageText(chatID int64, messageID int, text string) EditMessageTex
 }
 
 // NewEditMessageTextAndMarkup allows you to edit the text and replymarkup of a message.
-func NewEditMessageTextAndMarkup(chatID int64, messageID int, text string, replyMarkup InlineKeyboardMarkup) EditMessageTextConfig {
+func NewEditMessageTextAndMarkup(
+	chatID int64, messageID int,
+	text string,
+	replyMarkup InlineKeyboardMarkup,
+) EditMessageTextConfig {
 	return EditMessageTextConfig{
 		BaseEdit: BaseEdit{
 			ChatID:      chatID,
@@ -700,7 +704,10 @@ func NewEditMessageCaption(chatID int64, messageID int, caption string) EditMess
 
 // NewEditMessageReplyMarkup allows you to edit the inline
 // keyboard markup.
-func NewEditMessageReplyMarkup(chatID int64, messageID int, replyMarkup InlineKeyboardMarkup) EditMessageReplyMarkupConfig {
+func NewEditMessageReplyMarkup(
+	chatID int64, messageID int,
+	replyMarkup InlineKeyboardMarkup,
+) EditMessageReplyMarkupConfig {
 	return EditMessageReplyMarkupConfig{
 		BaseEdit: BaseEdit{
 			ChatID:      chatID,
@@ -850,7 +857,11 @@ func NewCallbackWithAlert(id, text string) CallbackConfig {
 }
 
 // NewInvoice creates a new Invoice request to the user.
-func NewInvoice(chatID int64, title, description, payload, providerToken, startParameter, currency string, prices *[]LabeledPrice) InvoiceConfig {
+func NewInvoice(
+	chatID int64,
+	title, description, payload, providerToken, startParameter, currency string,
+	prices *[]LabeledPrice,
+) InvoiceConfig {
 	return InvoiceConfig{
 		BaseChat:       BaseChat{ChatID: chatID},
 		Title:          title,
