@@ -894,3 +894,60 @@ func (bot *BotAPI) GetStickerSet(config GetStickerSetConfig) (*StickerSet, error
 	_, err = bot.MakeRequest(config.method(), v, &stickerSet)
 	return &stickerSet, err
 }
+
+// GetMyCommands gets the current list of the bot's commands.
+func (bot *BotAPI) GetMyCommands() ([]BotCommand, error) {
+	res, err := bot.MakeRequest("getMyCommands", nil)
+	if err != nil {
+		return nil, err
+	}
+	var commands []BotCommand
+	err = json.Unmarshal(res.Result, &commands)
+	if err != nil {
+		return nil, err
+	}
+	return commands, nil
+}
+
+// SetMyCommands changes the list of the bot's commands.
+func (bot *BotAPI) SetMyCommands(commands []BotCommand) error {
+	v := url.Values{}
+	data, err := json.Marshal(commands)
+	if err != nil {
+		return err
+	}
+	v.Add("commands", string(data))
+	_, err = bot.MakeRequest("setMyCommands", v)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// EscapeText takes an input text and escape Telegram markup symbols.
+// In this way we can send a text without being afraid of having to escape the characters manually.
+// Note that you don't have to include the formatting style in the input text, or it will be escaped too.
+// If there is an error, an empty string will be returned.
+//
+// parseMode is the text formatting mode (ModeMarkdown, ModeMarkdownV2 or ModeHTML)
+// text is the input string that will be escaped
+func EscapeText(parseMode string, text string) string {
+	var replacer *strings.Replacer
+
+	if parseMode == ModeHTML {
+		replacer = strings.NewReplacer("<", "&lt;", ">", "&gt;", "&", "&amp;")
+	} else if parseMode == ModeMarkdown {
+		replacer = strings.NewReplacer("_", "\\_", "*", "\\*", "`", "\\`", "[", "\\[")
+	} else if parseMode == ModeMarkdownV2 {
+		replacer = strings.NewReplacer(
+			"_", "\\_", "*", "\\*", "[", "\\[", "]", "\\]", "(",
+			"\\(", ")", "\\)", "~", "\\~", "`", "\\`", ">", "\\>",
+			"#", "\\#", "+", "\\+", "-", "\\-", "=", "\\=", "|",
+			"\\|", "{", "\\{", "}", "\\}", ".", "\\.", "!", "\\!",
+		)
+	} else {
+		return ""
+	}
+
+	return replacer.Replace(text)
+}
